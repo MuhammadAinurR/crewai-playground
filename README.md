@@ -1,13 +1,3 @@
-# crewai-playground
-
-# this is a playground for crewai
-
-how to run:
-
-```
-uvicorn src.main:app --reload --port 8000
-```
-
 # 🚀 AI-Powered API Development with CrewAI & FastAPI
 
 **Build Scalable AI Services with Dynamic Agent Teams & Production-Grade APIs**
@@ -48,7 +38,7 @@ POST /api/v1/analyze
 
 ### Clone & Setup
 ```bash
-git clone https://github.com/yourusername/crewai-fastapi-service.git
+git clone https://github.com/MuhammadAinurR/crewai-playground.git
 conda env create -f environment.yml
 ```
 
