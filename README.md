@@ -1,96 +1,172 @@
-# 🚀 AI-Powered API Development with CrewAI & FastAPI
+<div align="center">
 
-**Build Scalable AI Services with Dynamic Agent Teams & Production-Grade APIs**
+# 🤖 AI-Powered Technical Recruitment System
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![CrewAI](https://img.shields.io/badge/CrewAI-FFD43B?style=for-the-badge&logo=python&logoColor=blue)](https://www.crewai.com/)
 [![Groq](https://img.shields.io/badge/Groq-4BAAEE?style=for-the-badge)](https://groq.com/)
 
-**✨ Turn complex AI workflows into production-ready APIs in minutes!**  
-This repository demonstrates how to combine CrewAI's powerful agent orchestration with FastAPI's high-performance framework to create enterprise-grade AI services.
+**Transform Your Technical Recruitment Process with AI-Powered Assessments**
 
-## 🔥 Why You Should Care
+[Features](#features) •
+[Installation](#installation) •
+[Usage](#usage) •
+[Documentation](#documentation) •
+[Contributing](#contributing)
 
-✅ **Real-Time AI Teams** - Create dynamic agent teams (writers, translators, analysts) that collaborate through API endpoints  
-✅ **Blazing Fast Inference** - Leverage Groq's LPU for 300x faster LLM responses compared to traditional GPUs  
-✅ **Production-Ready** - JWT Auth, Rate Limiting, and Caching built-in  
-✅ **Zero Vendor Lock-In** - Switch between AI models (Groq/OpenAI/Anthropic) with one config change  
-
-## 🎯 Key Features
-
-```python
-# Your AI workforce on-demand
-POST /api/v1/analyze
-{
-  "documentation": "Your technical content here",
-  "target_language": "Spanish"
-}
-
-# Returns
-{
-  "summary": "Concise technical summary...",
-  "translation": "Localized translation...",
-  "quality_score": 92.4
-}
-```
-
-## 🚄 Getting Started in 60 Seconds
-
-### Clone & Setup
-```bash
-git clone https://github.com/MuhammadAinurR/crewai-playground.git
-conda env create -f environment.yml
-```
-
-### Run with Groq Speed 🚀
-```bash
-uvicorn src.main:app --reload --port 8000
-```
-
-### Test Drive
-```bash
-curl -X POST "http://localhost:8000/api/v1/analyze" \
-  -H "Content-Type: application/json" \
-  -d '{"documentation": "Your tech docs here"}'
-```
-
-## 🌟 Why This Isn't Just Another AI Wrapper
-
-### 🔍 Enterprise Architecture
-```
-User Request → FastAPI → AI Agent Team → Groq LLM → Structured Response
-       ↑           ↓
-Rate Limiting    Redis Cache
-```
-
-### 🛠️ Battle-Tested Patterns
-- Full async support for 10k+ RPM
-- Automatic API documentation (Swagger/OpenAPI)
-- Type-safe validation with Pydantic v2
-- Zero-downtime deployment recipes
-
-### 🧠 Smart Agent Showcase
-
-| Agent Role | Superpower | Example Use Case |
-|------------|------------|------------------|
-| Technical Writer | Simplifies complex concepts | API documentation generation |
-| Localization Expert | 50+ language support | Real-time technical translation |
-| Quality Analyst | Automated content scoring | AI output validation |
-
-### 🛣️ Roadmap
-- AI Team Performance Dashboard (Live Metrics)
-- Multi-Modal Agent Support (Vision + Text)
-- One-Click Docker Deployment
-- Automated CI/CD Pipelines
-
-### 💡 Perfect For
-- Startups needing AI capabilities without dedicated ML teams
-- Enterprises modernizing legacy systems with AI
-- Developers building next-gen AI-native applications
-- Technical content teams automating documentation
+</div>
 
 ---
 
-[📚 Full Documentation](link) | [💬 Discussion Thread](link) | [🐛 Report Issues](link)
+## 🌟 Overview
 
-<p align="center">💻 Hackable • 🚀 Scalable • 🔥 Production-Ready</p>
+An intelligent system that revolutionizes technical recruitment by:
+- 🎯 Analyzing job descriptions to create structured assessment criteria
+- 🤔 Generating in-depth technical questions
+- 📊 Providing objective candidate evaluations
+- 🚀 Streamlining the entire recruitment process
+
+## ✨ Features
+
+### 1️⃣ Smart Job Analysis
+```python
+POST /api/v1/recruitment/analyze-job
+{
+    "title": "Senior Backend Engineer",
+    "requirements": ["Python", "FastAPI", "Redis"],
+    "responsibilities": ["API Design", "Team Leadership"]
+}
+```
+
+### 2️⃣ Intelligent Question Generation
+```python
+POST /api/v1/recruitment/generate-questions
+# Generates role-specific technical questions based on CV and criteria
+```
+
+### 3️⃣ Automated Response Evaluation
+```python
+POST /api/v1/recruitment/evaluate-response
+# Provides detailed scoring and feedback on candidate responses
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.8+
+- FastAPI
+- CrewAI
+- Groq API Key
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/MuhammadAinurR/crewai-playground
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up environment variables
+cp .env.example .env
+# Add your Groq API key to .env
+```
+
+## 💻 Usage Guide
+
+### 1. Start the Server
+```bash
+uvicorn src.main:app --reload
+```
+
+### 2. API Endpoints
+
+#### Analyze Job Description
+```bash
+curl -X POST "http://localhost:8000/api/v1/recruitment/analyze-job" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "title": "Senior Backend Engineer",
+           "description": "..."
+         }'
+```
+
+#### Generate Questions
+```bash
+curl -X POST "http://localhost:8000/api/v1/recruitment/generate-questions" \
+     -F "cv_file=@path/to/cv.pdf" \
+     -F "criteria=@path/to/criteria.json"
+```
+
+#### Evaluate Responses
+```bash
+curl -X POST "http://localhost:8000/api/v1/recruitment/evaluate-response" \
+     -F "question_id=technical_questions[0]" \
+     -F "response=candidate answer" \
+     -F "criteria=@path/to/criteria.json"
+```
+
+## 📊 Example Response
+
+```json
+{
+    "technical_accuracy": {
+        "score": 85,
+        "comments": "Strong understanding of concepts..."
+    },
+    "understanding_depth": {
+        "score": 80,
+        "comments": "Good fundamental knowledge..."
+    },
+    "practical_experience": {
+        "score": 90,
+        "comments": "Excellent hands-on experience..."
+    }
+}
+```
+
+## 🛠️ Tech Stack
+
+- **FastAPI** - High-performance web framework
+- **CrewAI** - AI agent orchestration
+- **Groq** - Ultra-fast LLM inference
+- **PyPDF2** - PDF processing
+- **Pydantic** - Data validation
+
+## 🔜 Roadmap
+
+- [ ] Voice Interview Integration
+- [ ] Enhanced Analytics Dashboard
+- [ ] Custom Assessment Workflows
+- [ ] Multi-language Support
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- CrewAI Team for the amazing framework
+- Groq for ultra-fast LLM inference
+- FastAPI for the robust web framework
+
+---
+
+<div align="center">
+
+### Made with ❤️ for Better Technical Recruitment
+
+[Report Bug](https://github.com/yourusername/repo/issues) • [Request Feature](https://github.com/yourusername/repo/issues)
+
+</div>
