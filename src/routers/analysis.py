@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
+import json
 
 from ..agents.summarizer import create_summarizer
 from ..tasks.summary_task import create_summary_task
-from ..models.summary import SummaryResult
+from ..models.summary import SummaryResult, SummaryResponse
 from ..config.settings import settings, Settings, Environment
 from crewai import Crew
 from ..dependencies import get_settings, get_llm
@@ -36,11 +37,11 @@ async def health_check() -> HealthResponse:
         environment=settings.environment
     )
 
-@router.post("/analyze", response_model=SummaryResult)
+@router.post("/analyze", response_model=SummaryResponse)
 async def analyze_documentation(
     payload: AnalysisRequest,
     settings: Settings = Depends(get_settings)
-) -> SummaryResult:
+) -> SummaryResponse:
     """
     Analyze and summarize the provided documentation.
     
@@ -48,7 +49,7 @@ async def analyze_documentation(
         payload (AnalysisRequest): Request containing documentation and optional target language
     
     Returns:
-        SummaryResult: Contains the summary and token usage statistics
+        SummaryResponse: Contains the summary and key points
         
     Raises:
         HTTPException: If there's an error processing the documentation
@@ -70,7 +71,13 @@ async def analyze_documentation(
         
         result = crew.kickoff()
         logger.info("Analysis completed successfully")
-        return SummaryResult(result=result)
+        
+        # Parse the result directly
+        parsed_result = json.loads(result.raw)
+        return SummaryResponse(
+            summary=parsed_result["summary"],
+            key_points=parsed_result["key_points"]
+        )
     
     except Exception as e:
         logger.error(f"Error during analysis: {str(e)}", exc_info=True)

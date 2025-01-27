@@ -37,16 +37,17 @@ class SummaryResponse(BaseModel):
 class SummaryResult(BaseModel):
     result: Any
 
-    def model_dump(self):
-        # Parse the raw JSON string from CrewAI's output
+    def model_dump(self, **kwargs):
         try:
-            parsed_result = json.loads(self.result.raw)
-            return SummaryResponse(
-                summary=parsed_result["summary"],
-                key_points=parsed_result["key_points"]
-            ).model_dump()
-        except Exception:
-            return super().model_dump()
+            # Handle nested CrewAI output structure
+            raw_json = self.result.raw if hasattr(self.result, 'raw') else self.result
+            parsed_result = json.loads(raw_json)
+            return {
+                "summary": parsed_result["summary"],
+                "key_points": parsed_result["key_points"]
+            }
+        except Exception as e:
+            return super().model_dump(**kwargs)
 
     class Config:
         arbitrary_types_allowed = True
