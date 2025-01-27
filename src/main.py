@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import analysis, translation
+from .routers import analysis, translation, cv_analysis
 from .config.settings import settings
 from .utils.logger import setup_logger
 
@@ -25,6 +25,7 @@ app.add_middleware(
 # Include routers
 app.include_router(analysis.router)
 app.include_router(translation.router)
+app.include_router(cv_analysis.router)
 
 @app.on_event("startup")
 async def startup_event():
