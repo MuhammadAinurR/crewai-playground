@@ -5,10 +5,10 @@ import json
 
 from ..agents.summarizer import create_summarizer
 from ..tasks.summary_task import create_summary_task
-from ..models.summary import SummaryResult, SummaryResponse
-from ..config.settings import settings, Settings, Environment
+from ..models.summary import SummaryResponse
+from ..config.settings import Settings, Environment
 from crewai import Crew
-from ..dependencies import get_settings, get_llm
+from ..dependencies import get_settings
 from ..utils.logger import setup_logger
 
 logger = setup_logger(__name__)
@@ -25,7 +25,7 @@ class AnalysisRequest(BaseModel):
     target_language: Optional[str] = None
 
 @router.get("/health", response_model=HealthResponse)
-async def health_check() -> HealthResponse:
+async def health_check(settings: Settings = Depends(get_settings)) -> HealthResponse:
     """
     Check the health status of the API.
     
@@ -44,15 +44,6 @@ async def analyze_documentation(
 ) -> SummaryResponse:
     """
     Analyze and summarize the provided documentation.
-    
-    Args:
-        payload (AnalysisRequest): Request containing documentation and optional target language
-    
-    Returns:
-        SummaryResponse: Contains the summary and key points
-        
-    Raises:
-        HTTPException: If there's an error processing the documentation
     """
     logger.info("Starting documentation analysis")
     try:
@@ -72,7 +63,6 @@ async def analyze_documentation(
         result = crew.kickoff()
         logger.info("Analysis completed successfully")
         
-        # Parse the result directly
         parsed_result = json.loads(result.raw)
         return SummaryResponse(
             summary=parsed_result["summary"],
