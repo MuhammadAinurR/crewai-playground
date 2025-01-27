@@ -7,7 +7,7 @@
 [![CrewAI](https://img.shields.io/badge/CrewAI-FFD43B?style=for-the-badge&logo=python&logoColor=blue)](https://www.crewai.com/)
 [![Groq](https://img.shields.io/badge/Groq-4BAAEE?style=for-the-badge)](https://groq.com/)
 
-**Transform Your Technical Recruitment Process with AI-Powered Assessments**
+**Transform Your Technical Recruitment Process with AI-Powered Dynamic Interviews**
 
 [Features](#features) •
 [Installation](#installation) •
@@ -22,10 +22,10 @@
 ## 🌟 Overview
 
 An intelligent system that revolutionizes technical recruitment by:
-- 🎯 Analyzing job descriptions to create structured assessment criteria
-- 🤔 Generating in-depth technical questions
-- 📊 Providing objective candidate evaluations
-- 🚀 Streamlining the entire recruitment process
+- 🎯 Creating dynamic, depth-first technical interviews
+- 🤔 Adapting questions based on candidate responses
+- 📊 Progressive technical depth assessment
+- 🚀 Google-style interview experience
 
 ## ✨ Features
 
@@ -34,21 +34,40 @@ An intelligent system that revolutionizes technical recruitment by:
 POST /api/v1/recruitment/analyze-job
 {
     "title": "Senior Backend Engineer",
-    "requirements": ["Python", "FastAPI", "Redis"],
-    "responsibilities": ["API Design", "Team Leadership"]
+    "description": "Looking for an expert in distributed systems",
+    "requirements": ["Python", "Redis", "Distributed Systems"],
+    "responsibilities": ["System Design", "Performance Optimization"]
 }
 ```
 
-### 2️⃣ Intelligent Question Generation
+### 2️⃣ Dynamic Interview Generation
 ```python
 POST /api/v1/recruitment/generate-questions
-# Generates role-specific technical questions based on CV and criteria
+# Generates conversation flows that adapt based on responses
+{
+    "conversation_flows": [
+        {
+            "initial_topic": "Redis Implementation",
+            "base_question": "How have you used Redis?",
+            "follow_up_questions": [
+                {
+                    "trigger": "caching",
+                    "deeper_questions": [
+                        "Memory limits handling?",
+                        "Scaling strategies?",
+                        "High availability setup?"
+                    ]
+                }
+            ]
+        }
+    ]
+}
 ```
 
-### 3️⃣ Automated Response Evaluation
+### 3️⃣ Progressive Depth Evaluation
 ```python
 POST /api/v1/recruitment/evaluate-response
-# Provides detailed scoring and feedback on candidate responses
+# Evaluates technical depth and suggests deeper follow-ups
 ```
 
 ## 🚀 Quick Start
@@ -58,12 +77,13 @@ POST /api/v1/recruitment/evaluate-response
 - FastAPI
 - CrewAI
 - Groq API Key
+- PyPDF2
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/MuhammadAinurR/crewai-playground
+git clone https://github.com/yourusername/repo
 
 # Install dependencies
 pip install -r requirements.txt
@@ -80,9 +100,9 @@ cp .env.example .env
 uvicorn src.main:app --reload
 ```
 
-### 2. API Endpoints
+### 2. API Flow
 
-#### Analyze Job Description
+#### Step 1: Create Assessment Criteria
 ```bash
 curl -X POST "http://localhost:8000/api/v1/recruitment/analyze-job" \
      -H "Content-Type: application/json" \
@@ -92,37 +112,38 @@ curl -X POST "http://localhost:8000/api/v1/recruitment/analyze-job" \
          }'
 ```
 
-#### Generate Questions
+#### Step 2: Generate Dynamic Interview
 ```bash
 curl -X POST "http://localhost:8000/api/v1/recruitment/generate-questions" \
      -F "cv_file=@path/to/cv.pdf" \
      -F "criteria=@path/to/criteria.json"
 ```
 
-#### Evaluate Responses
+#### Step 3: Evaluate and Progress
 ```bash
 curl -X POST "http://localhost:8000/api/v1/recruitment/evaluate-response" \
-     -F "question_id=technical_questions[0]" \
+     -F "question_id=conversation_flows[0].base_question" \
      -F "response=candidate answer" \
      -F "criteria=@path/to/criteria.json"
 ```
 
-## 📊 Example Response
+## 📊 Example Conversation Flow
 
 ```json
 {
-    "technical_accuracy": {
-        "score": 85,
-        "comments": "Strong understanding of concepts..."
-    },
-    "understanding_depth": {
-        "score": 80,
-        "comments": "Good fundamental knowledge..."
-    },
-    "practical_experience": {
-        "score": 90,
-        "comments": "Excellent hands-on experience..."
-    }
+    "initial_topic": "Redis Implementation",
+    "base_question": "Explain your Redis experience",
+    "follow_up_questions": [
+        {
+            "trigger": "caching",
+            "question": "What about memory limits?",
+            "deeper_questions": [
+                "How do you handle eviction?",
+                "What's your scaling strategy?",
+                "High availability approach?"
+            ]
+        }
+    ]
 }
 ```
 
@@ -136,20 +157,15 @@ curl -X POST "http://localhost:8000/api/v1/recruitment/evaluate-response" \
 
 ## 🔜 Roadmap
 
-- [ ] Voice Interview Integration
-- [ ] Enhanced Analytics Dashboard
-- [ ] Custom Assessment Workflows
-- [ ] Multi-language Support
+- [ ] Real-time Voice Interview Integration
+- [ ] Interview Memory System
+- [ ] Multi-topic Conversation Flows
+- [ ] Technical Depth Analytics
+- [ ] Custom Interview Patterns
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## 📝 License
 
@@ -160,12 +176,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - CrewAI Team for the amazing framework
 - Groq for ultra-fast LLM inference
 - FastAPI for the robust web framework
+- Google's technical interview style for inspiration
 
 ---
 
 <div align="center">
 
-### Made with ❤️ for Better Technical Recruitment
+### Made with ❤️ for Smarter Technical Interviews
 
 [Report Bug](https://github.com/yourusername/repo/issues) • [Request Feature](https://github.com/yourusername/repo/issues)
 

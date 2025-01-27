@@ -17,27 +17,42 @@ DEFAULT_CRITERIA_FORMAT = '''{
 }'''
 
 DEFAULT_QUESTIONS_FORMAT = '''{
-    "technical_questions": [
+    "conversation_flows": [
         {
-            "question": "detailed technical question",
-            "context": "why this is being asked",
-            "expected_points": ["key points to look for in answer"]
+            "initial_topic": "Redis Implementation",
+            "base_question": "Can you explain how you've implemented Redis in your projects?",
+            "follow_up_questions": [
+                {
+                    "trigger": "caching",
+                    "question": "What happens when Redis hits memory limits in your implementation?",
+                    "deeper_questions": [
+                        "How do you handle Redis cache eviction policies?",
+                        "What strategies have you implemented for scaling Redis?",
+                        "How do you ensure Redis high availability in production?"
+                    ]
+                },
+                {
+                    "trigger": "queue",
+                    "question": "How do you prevent Redis from becoming a SPOF when used as a queue?",
+                    "deeper_questions": [
+                        "What backup mechanisms do you implement?",
+                        "How do you handle failed jobs?",
+                        "What monitoring systems do you use?"
+                    ]
+                }
+            ],
+            "exit_conditions": [
+                "Cannot explain scaling strategies",
+                "Limited understanding of HA concepts",
+                "Unclear about monitoring approaches"
+            ]
         }
     ],
-    "experience_questions": [
-        {
-            "question": "experience-based question",
-            "context": "relevant experience to verify",
-            "expected_points": ["key points to look for in answer"]
-        }
-    ],
-    "problem_solving_questions": [
-        {
-            "question": "scenario-based question",
-            "context": "problem-solving aspect being tested",
-            "expected_points": ["key points to look for in answer"]
-        }
-    ]
+    "assessment_points": {
+        "technical_depth": "How deep into technical details they can go",
+        "problem_solving": "How they approach scaling and reliability issues",
+        "experience": "Real-world examples and challenges they've faced"
+    }
 }'''
 
 DEFAULT_EVALUATION_FORMAT = '''{
@@ -82,19 +97,27 @@ def create_interview_questions_task(
     assessment_criteria: dict,
     agent: Agent
 ) -> Task:
-    """Generates interview questions based on CV and criteria."""
+    """Generates dynamic interview conversation flows."""
     return Task(
-        description=f"""Based on this CV and assessment criteria, create in-depth interview questions:
+        description=f"""Create a dynamic technical interview plan based on this CV and criteria:
         
         CV: {cv_text}
-        
         Criteria: {assessment_criteria}
         
-        Generate questions that:
-        1. Verify claimed experience with specific technical scenarios
-        2. Probe problem-solving abilities
-        3. Assess depth of knowledge in key technologies
-        4. Evaluate past project challenges and solutions""",
+        For each major skill/technology mentioned:
+        1. Start with a base question about their experience
+        2. Create follow-up questions that go progressively deeper
+        3. Include technical challenges and edge cases
+        4. Define points where to guide the candidate if they struggle
+        5. Identify when to move to the next topic
+        
+        Make questions:
+        - Progressive (each answer leads to a deeper technical discussion)
+        - Experience-based (focus on real scenarios they've handled)
+        - Problem-solving oriented (how they handle limitations/issues)
+        
+        The interview should feel like a natural technical discussion that 
+        gets progressively more challenging until the candidate's knowledge limit is reached.""",
         expected_output=DEFAULT_QUESTIONS_FORMAT,
         agent=agent
     )
