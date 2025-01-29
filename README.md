@@ -7,7 +7,7 @@
 [![CrewAI](https://img.shields.io/badge/CrewAI-FFD43B?style=for-the-badge&logo=python&logoColor=blue)](https://www.crewai.com/)
 [![Groq](https://img.shields.io/badge/Groq-4BAAEE?style=for-the-badge)](https://groq.com/)
 
-**Transform Your Technical Recruitment Process with AI-Powered Dynamic Interviews**
+**Transform Your Technical Recruitment Process with AI-Powered Analysis & Dynamic Interviews**
 
 [Features](#features) •
 [Installation](#installation) •
@@ -22,6 +22,7 @@
 ## 🌟 Overview
 
 An intelligent system that revolutionizes technical recruitment by:
+- 📄 Analyzing CVs with detailed feedback and recommendations
 - 🎯 Creating dynamic, depth-first technical interviews
 - 🤔 Adapting questions based on candidate responses
 - 📊 Progressive technical depth assessment
@@ -29,7 +30,48 @@ An intelligent system that revolutionizes technical recruitment by:
 
 ## ✨ Features
 
-### 1️⃣ Smart Job Analysis
+### 1️⃣ Smart CV Analysis
+```python
+POST /api/v1/analyze-cv
+# Upload a CV in PDF format for comprehensive analysis
+```
+
+Example Response:
+```json
+{
+    "summary": "Brief CV overview highlighting key qualifications",
+    "strengths": [
+        "Strong technical skills in full-stack development",
+        "Impressive project portfolio",
+        "Multiple technical certifications",
+        "Demonstrated adaptability"
+    ],
+    "improvements": [
+        "Summary optimization suggestions",
+        "Project description refinements",
+        "Experience detail recommendations"
+    ],
+    "skills_analysis": {
+        "technical": [
+            "Full-stack development skills",
+            "AI and machine learning expertise",
+            "Data analysis capabilities"
+        ],
+        "soft": [
+            "Adaptability",
+            "Collaboration",
+            "Communication"
+        ]
+    },
+    "recommendations": [
+        "Actionable CV improvements",
+        "Career development suggestions",
+        "Skills enhancement recommendations"
+    ]
+}
+```
+
+### 2️⃣ Smart Job Analysis
 ```python
 POST /api/v1/recruitment/analyze-job
 {
@@ -40,7 +82,7 @@ POST /api/v1/recruitment/analyze-job
 }
 ```
 
-### 2️⃣ Dynamic Interview Generation
+### 3️⃣ Dynamic Interview Generation
 ```python
 POST /api/v1/recruitment/generate-questions
 # Generates conversation flows that adapt based on responses
@@ -64,7 +106,7 @@ POST /api/v1/recruitment/generate-questions
 }
 ```
 
-### 3️⃣ Progressive Depth Evaluation
+### 4️⃣ Progressive Depth Evaluation
 ```python
 POST /api/v1/recruitment/evaluate-response
 # Evaluates technical depth and suggests deeper follow-ups
@@ -102,7 +144,14 @@ uvicorn src.main:app --reload
 
 ### 2. API Flow
 
-#### Step 1: Create Assessment Criteria
+#### Step 1: Analyze CV
+```bash
+curl -X POST "http://localhost:8000/api/v1/analyze-cv" \
+     -H "Content-Type: multipart/form-data" \
+     -F "cv_file=@path/to/cv.pdf"
+```
+
+#### Step 2: Create Assessment Criteria
 ```bash
 curl -X POST "http://localhost:8000/api/v1/recruitment/analyze-job" \
      -H "Content-Type: application/json" \
@@ -112,14 +161,14 @@ curl -X POST "http://localhost:8000/api/v1/recruitment/analyze-job" \
          }'
 ```
 
-#### Step 2: Generate Dynamic Interview
+#### Step 3: Generate Dynamic Interview
 ```bash
 curl -X POST "http://localhost:8000/api/v1/recruitment/generate-questions" \
      -F "cv_file=@path/to/cv.pdf" \
      -F "criteria=@path/to/criteria.json"
 ```
 
-#### Step 3: Evaluate and Progress
+#### Step 4: Evaluate and Progress
 ```bash
 curl -X POST "http://localhost:8000/api/v1/recruitment/evaluate-response" \
      -F "question_id=conversation_flows[0].base_question" \
@@ -152,11 +201,12 @@ curl -X POST "http://localhost:8000/api/v1/recruitment/evaluate-response" \
 - **FastAPI** - High-performance web framework
 - **CrewAI** - AI agent orchestration
 - **Groq** - Ultra-fast LLM inference
-- **PyPDF2** - PDF processing
+- **PyPDF2** - PDF processing for CV analysis
 - **Pydantic** - Data validation
 
 ## 🔜 Roadmap
 
+- [ ] Enhanced CV Analysis Features
 - [ ] Real-time Voice Interview Integration
 - [ ] Interview Memory System
 - [ ] Multi-topic Conversation Flows
