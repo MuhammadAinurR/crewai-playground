@@ -6,6 +6,7 @@ from crewai import Crew
 import json
 import PyPDF2
 import io
+from ..utils.interview_logic import InterviewLogicHandler
 
 router = APIRouter(prefix="/api/v1/recruitment", tags=["recruitment"])
 
@@ -57,11 +58,15 @@ async def generate_interview_questions(
 async def evaluate_response(
     question_id: str = Form(...),
     response: str = Form(...),
-    criteria: str = Form(...)  # Assessment criteria from step 1
+    criteria: str = Form(...),
+    conversation_flows: str = Form(...),
+    current_question_level: str = Form(default="base")
 ):
-    """Evaluate candidate's response"""
+    """Evaluate candidate's response and determine next question"""
     try:
+        # Existing evaluation logic
         criteria_dict = json.loads(criteria)
+        conversation_flows_dict = json.loads(conversation_flows)
         evaluator = create_evaluator()
         task = create_response_evaluation_task(
             question=question_id,
@@ -70,6 +75,26 @@ async def evaluate_response(
             agent=evaluator
         )
         crew = Crew(agents=[evaluator], tasks=[task])
-        return json.loads(crew.kickoff().raw)
+        evaluation = json.loads(crew.kickoff().raw)
+
+        # Get next question using interview logic
+        interview_handler = InterviewLogicHandler(conversation_flows_dict["conversation_flows"])
+        next_question_type, next_question, deeper_questions = (
+            interview_handler.select_next_question(
+                topic=question_id,
+                response=response,
+                evaluation=evaluation,
+                current_question_level=current_question_level
+            )
+        )
+
+        # Add next question information to response
+        evaluation["next_question"] = {
+            "type": next_question_type,
+            "question": next_question,
+            "deeper_questions": deeper_questions
+        }
+
+        return evaluation
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
