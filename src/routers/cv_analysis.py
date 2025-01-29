@@ -9,6 +9,8 @@ from crewai import Crew
 import PyPDF2
 import io
 import json
+from ..models.job_recommendations import JobRecommendationsResponse
+from ..tasks.job_recommendation_task import create_job_recommendation_task
 
 logger = setup_logger(__name__)
 router = APIRouter(prefix="/api/v1", tags=["cv-analysis"])
@@ -64,4 +66,57 @@ async def analyze_cv(
         raise HTTPException(
             status_code=500,
             detail=f"CV analysis error: {str(e)}"
+        )
+
+@router.post("/recommend-jobs", response_model=JobRecommendationsResponse)
+async def recommend_jobs(
+    cv_file: UploadFile = File(...),
+    settings: Settings = Depends(get_settings)
+) -> JobRecommendationsResponse:
+    """
+    Analyze a CV/resume PDF and provide job recommendations.
+    """
+    logger.info(f"Starting job recommendations for file: {cv_file.filename}")
+    
+    # Validate file type
+    if not cv_file.filename.endswith('.pdf'):
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF files are supported"
+        )
+    
+    try:
+        # Read PDF content
+        pdf_content = await cv_file.read()
+        pdf_reader = PyPDF2.PdfReader(io.BytesIO(pdf_content))
+        
+        # Extract text from all pages
+        cv_text = ""
+        for page in pdf_reader.pages:
+            cv_text += page.extract_text()
+        
+        # Create and execute recommendation task
+        analyst = create_cv_analyst()
+        recommendation_task = create_job_recommendation_task(
+            cv_text=cv_text,
+            agent=analyst
+        )
+        
+        crew = Crew(
+            agents=[analyst],
+            tasks=[recommendation_task],
+            verbose=settings.environment == Environment.DEVELOPMENT
+        )
+        
+        result = crew.kickoff()
+        logger.info("Job recommendations completed successfully")
+        
+        parsed_result = json.loads(result.raw)
+        return JobRecommendationsResponse(**parsed_result)
+    
+    except Exception as e:
+        logger.error(f"Error during job recommendation: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Job recommendation error: {str(e)}"
         ) 

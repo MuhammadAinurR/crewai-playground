@@ -32,8 +32,42 @@ An intelligent system that revolutionizes technical recruitment by:
 
 ### 1️⃣ Smart CV Analysis
 ```python
+# CV Analysis
 POST /api/v1/analyze-cv
 # Upload a CV in PDF format for comprehensive analysis
+
+# Job Recommendations
+POST /api/v1/recommend-jobs
+# Get personalized job recommendations based on CV analysis
+```
+
+Example Job Recommendations Response:
+```json
+{
+    "recommendations": [
+        {
+            "title": "Senior Full Stack Developer",
+            "match_score": 0.92,
+            "key_matches": [
+                "JavaScript/TypeScript",
+                "React",
+                "Node.js",
+                "Full Stack Experience"
+            ],
+            "description": "Role description and requirements",
+            "required_skills": [
+                "JavaScript",
+                "React",
+                "Node.js"
+            ],
+            "recommended_skills": [
+                "AWS",
+                "System Design"
+            ]
+        }
+    ],
+    "summary": "Based on your strong full-stack development background..."
+}
 ```
 
 Example Response:
