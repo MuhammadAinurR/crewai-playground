@@ -59,7 +59,7 @@ curl -X POST "http://localhost:8000/api/v1/recruitment/generate-questions" \
      -F "criteria=@criteria.json"
 ```
 
-### 3. Evaluate & Get Follow-ups
+### 3. Evaluate base question or Get Follow-ups
 ```bash
 curl -X POST "http://localhost:8000/api/v1/recruitment/evaluate-response" \
      -F "question_id=Python Development" \
